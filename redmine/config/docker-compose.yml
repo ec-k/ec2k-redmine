@@ -1,0 +1,37 @@
+version: '3.1'
+
+# Redmine with MySQL
+services:
+  mysql:
+    image: ec2k-redmine/mysql
+    container_name: mysql
+    restart: always
+    volumes:
+      - main-redmine-db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: redmine
+      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_USER: user
+
+  redmine:
+    image: ec2k-redmine/redmine
+    container_name: redmine
+    restart: always
+    ports:
+      - 51680:3000
+    links:
+      - mysql
+    volumes:
+      - main-redmine-files:/usr/src/redmine/files
+    environment:
+      REDMINE_DB_MYSQL: mysql
+      REDMINE_DB_USERNAME: mysql
+      REDMINE_DB_PASSWORD: mysql
+      REDMINE_DB_DATABASE: redmine
+
+volumes:
+  main-redmine-db:
+    external: true
+  main-redmine-files:
+    external: true
