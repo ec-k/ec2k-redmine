@@ -6,13 +6,10 @@ services:
     image: ec2k-redmine/mysql
     container_name: mysql
     restart: always
+    env_file:
+      - ./mysql-settings.env
     volumes:
       - main-redmine-db:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: redmine
-      MYSQL_PASSWORD: mysql
-      MYSQL_ROOT_PASSWORD: mysql
-      MYSQL_USER: user
 
   redmine:
     image: ec2k-redmine/redmine
@@ -22,13 +19,10 @@ services:
       - 51680:3000
     links:
       - mysql
+    env_file:
+      - ./redmine-db-settings.env
     volumes:
       - main-redmine-files:/usr/src/redmine/files
-    environment:
-      REDMINE_DB_MYSQL: mysql
-      REDMINE_DB_USERNAME: mysql
-      REDMINE_DB_PASSWORD: mysql
-      REDMINE_DB_DATABASE: redmine
 
 volumes:
   main-redmine-db:
